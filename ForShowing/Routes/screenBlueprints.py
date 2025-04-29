@@ -213,10 +213,3 @@ def viewAssignments():
                            AssignmentName=assignmentName)
 
 
-
-### FOR SHOW
-HomeScreenBlueprint = Blueprint("homeScreen", __name__)
-@HomeScreenBlueprint.route("/homeScreen")
-def homeScreen():
-    # Render the home screen template
-    return render_template("homeScreen.html")

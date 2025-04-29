@@ -642,3 +642,181 @@ class DataBaseHandler:
         self.disconnect()
         # Return the student information
         return StudentInfo
+    
+
+### CYCLE 4 ####
+    def JoinClass(self, StudentUsername: str, classID: int):
+        """
+        Adds a student to a specified class and creates related task completion records in the database.
+
+        This function connects to the database, retrieves assignment information for the specified class,
+        inserts the student into the ClassStudentJoin table, and creates task completion records for each
+        assignment in the class, marking them as not done.
+
+        Parameters:
+        StudentUsername (str): The username of the student to be added to the class.
+        classID (int): The ID of the class to which the student is to be added.
+
+        Returns:
+        None
+        """
+        # Get assignment information for the specified class
+        AssignmentInfo = self.getAssignmentInfoClassID(classID)
+        
+        # Extract assignment IDs from the assignment information
+        AssignmentIDs = []
+        for AssignmentID in AssignmentInfo:
+            AssignmentIDs.append(AssignmentID[0])
+        
+        # Connect to the database
+        self.connect()
+        
+        # Insert the student into the ClassStudentJoin table
+        self.cursor.execute(""" 
+                            INSERT INTO ClassStudentJoin
+                            (StudentUsername, classID)
+                            VALUES (?,?)
+                            ;""", (StudentUsername, classID))
+        
+        # Insert a record into TaskCompleted for each assignment, marking it as not done
+        for AssignmentID in AssignmentIDs:
+            self.cursor.execute("""
+                            INSERT INTO TaskCompleted
+                            (StudentUsername, AssignmentID, Done)
+                            VALUES (?,?,?)
+                            ;""", (StudentUsername, AssignmentID, False))
+        
+        # Commit the changes to the database
+        self.connection.commit()
+
+        # Disconnect from the database
+        self.disconnect()
+
+    def markAssignmentAsDone(self, AssignmentName: str, StudentUsername: str):
+        """
+        Marks an assignment as done for a specified student in the database.
+
+        This function connects to the database, retrieves the AssignmentID for the specified
+        assignment name, updates the TaskCompleted table to mark the assignment as done for
+        the specified student, and then disconnects from the database.
+
+        Returns:
+        None
+        """
+        # Connect to the database
+        self.connect()
+        
+        # Retrieve the AssignmentID for the specified assignment name
+        self.cursor.execute("""
+                            SELECT AssignmentID
+                            FROM Assignments
+                            WHERE AssignmentName = ?
+                            ;""", [AssignmentName])
+        AssignmentID = self.cursor.fetchone()
+        # makes the result of the query into a list called AssignmentID
+
+        # Update the TaskCompleted table to mark the assignment as done for the specified student
+        self.cursor.execute("""
+                            UPDATE TaskCompleted
+                            SET Done = ?
+                            WHERE AssignmentID = ? AND StudentUsername = ?
+                            ;""", [True, AssignmentID[0], StudentUsername])
+        
+        # Commit the changes to the database
+        self.connection.commit()
+        
+        # Disconnect from the database
+        self.disconnect()
+
+    def deleteStudent(self, studentUsername: str):
+        """
+        Deletes a student and all related records from the database.
+
+        This function connects to the database and deletes the student from the Students table,
+        as well as all related records from the ClassStudentJoin, Answers, and TaskCompleted tables.
+
+        Parameters:
+        studentUsername (str): The username of the student to be deleted.
+
+        Returns:
+        None
+        """
+        # Connect to the database
+        self.connect()
+        # Delete the student from the Students table
+        self.cursor.execute(""" 
+                            DELETE
+                            FROM Students
+                            WHERE StudentUsername = ?
+                            ;""", (studentUsername))
+        # Delete the student from the ClassStudentJoin table
+        self.cursor.execute(""" 
+                            DELETE
+                            FROM ClassStudentJoin
+                            WHERE StudentUsername = ?
+                            ;""", (studentUsername))
+        # Delete the student's answers from the Answers table
+        self.cursor.execute(""" 
+                            DELETE
+                            FROM Answers
+                            WHERE StudentUsername = ?
+                            ;""", (studentUsername))
+        # Delete the student's task completion records from the TaskCompleted table
+        self.cursor.execute(""" 
+                            DELETE
+                            FROM TaskCompleted
+                            WHERE StudentUsername = ?
+                            ;""", (studentUsername))
+        # Commit the changes to the database
+        self.connection.commit()
+        # Disconnect from the database
+        self.disconnect()
+
+    def getSetAssignments(self, studentUsername: str):
+        """
+        Retrieves assignments that are not done for a specified student from the database.
+
+        Returns:
+        list: A list of tuples, where each tuple contains the AssignmentID, AssignmentName,
+              and AssignmentDescription for an assignment that is not done by the specified student.
+        """
+        # Connect to the database
+        self.connect()
+        # Retrieve assignments that are not done for the specified student
+        self.cursor.execute("""
+                            SELECT Assignments.AssignmentID, Assignments.AssignmentName, 
+                            Assignments.AssignmentDescription
+                            FROM Assignments
+                            JOIN TaskCompleted
+                            ON  Assignments.AssignmentID = TaskCompleted.AssignmentID
+                            WHERE TaskCompleted.StudentUsername = ? AND TaskCompleted.Done = ?
+                            ;""", [studentUsername, False])
+        AssignmentInfo = self.cursor.fetchall()
+        # Disconnect from the database
+        self.disconnect()
+        # Return the assignment information
+        return AssignmentInfo
+    
+    def getClassInfoStudent(self, studentUsername: str):
+        """
+        Retrieves class information for a specified student from the database.
+
+        Returns:
+        list: A list of tuples, where each tuple contains the ClassID and ClassName
+              for a class that the specified student is enrolled in.
+        """
+        # Connect to the database
+        self.connect()
+        # Retrieve class information for the specified student
+        self.cursor.execute("""
+                            SELECT Classes.ClassID, Classes.ClassName
+                            FROM Classes
+                            JOIN ClassStudentJoin
+                            ON  Classes.ClassID = ClassStudentJoin.ClassID
+                            WHERE ClassStudentJoin.StudentUsername = ?
+                            ;""", [studentUsername])
+        ClassInfo = self.cursor.fetchall()
+        # Disconnect from the database
+        self.disconnect()
+        # Return the class information
+        return ClassInfo

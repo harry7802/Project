@@ -40,7 +40,8 @@ app.register_blueprint(teacherHomeScreenBlueprint)
 app.register_blueprint(createUserBlueprint)
 app.register_blueprint(loginBlueprint)
 app.register_blueprint(logOutBlueprint)
-app.register_blueprint(HomeScreenBlueprint)
+
+
 
 
 

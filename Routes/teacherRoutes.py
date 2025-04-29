@@ -3,7 +3,7 @@ from DatabaseCycle3 import DataBaseHandler
 
 # Define blueprints for different teacher-related routes
 CreateClassBlueprint = Blueprint("createClass", __name__)
-createAssignmentBlueprint = Blueprint("createAssignment", __name__)
+CreateAssignmentBlueprint = Blueprint("createAssignment", __name__)
 deleteClassBlueprint = Blueprint("deleteClass",__name__)
 deleteAssignmentBlueprint = Blueprint("deleteAssignment",__name__)
 deleteStudentFromClassBlueprint = Blueprint("deleteStudentFromClass", __name__)
@@ -32,7 +32,7 @@ def createClass():
     return redirect("/teacherHomeScreen")
 
 # Route to create a new assignment
-@createAssignmentBlueprint.route("/createAssignment", methods = ["post"])
+@CreateAssignmentBlueprint.route("/createAssignment", methods = ["post"])
 def createAssignment():
     # Initialize the database handler with the database file
     db = DataBaseHandler("appdata.db")
