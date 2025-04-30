@@ -648,8 +648,7 @@ class DataBaseHandler:
 
 
     def JoinClass(self, StudentUsername: str, classID: int):
-        """
-        Adds a student to a specified class and creates related task completion records in the database.
+        """Adds a student to a specified class and creates related task completion records in the database.
 
         This function connects to the database, retrieves assignment information for the specified class,
         inserts the student into the ClassStudentJoin table, and creates task completion records for each
@@ -660,8 +659,7 @@ class DataBaseHandler:
         classID (int): The ID of the class to which the student is to be added.
 
         Returns:
-        None
-        """
+        None"""
         # Get assignment information for the specified class
         AssignmentInfo = self.getAssignmentInfoClassID(classID)
         
@@ -669,7 +667,6 @@ class DataBaseHandler:
         AssignmentIDs = []
         for AssignmentID in AssignmentInfo:
             AssignmentIDs.append(AssignmentID[0])
-        
         # Connect to the database
         self.connect()
         
@@ -690,7 +687,6 @@ class DataBaseHandler:
         
         # Commit the changes to the database
         self.connection.commit()
-
         # Disconnect from the database
         self.disconnect()
 

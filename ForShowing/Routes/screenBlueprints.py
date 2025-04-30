@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, session
-from DatabaseCycle3 import DataBaseHandler
+from ForShowing.Database import DataBaseHandler
 
 # Define blueprints for different screens
 loginScreenBlueprint = Blueprint("loginScreen", __name__)
@@ -9,9 +9,15 @@ teacherHomeScreenBlueprint = Blueprint("teacherHomeScreen", __name__)
 classDetailsScreenBlueprint = Blueprint("classDetailsScreen", __name__)
 AssignmentDetailsScreenBlueprint = Blueprint("AssignmentDetailsScreen", __name__)
 refreshClassScreenBlueprint = Blueprint("refreshClassScreen", __name__)
+teacherManagementScreenBlueprint = Blueprint("teacherManagementScreen", __name__)
 viewAssignmentsScreenBlueprint = Blueprint("viewAssignmentsScreen", __name__)
 studentManagementScreenBlueprint = Blueprint("studentManagementScreen", __name__)
-teacherManagementScreenBlueprint = Blueprint("teacherManagementScreen", __name__)
+
+# Route for the student management screen
+@studentManagementScreenBlueprint.route("/studentManagementScreen")
+def studentManagementScreen():
+    # Render the student management template
+    return render_template("studentManagement.html")
 
 # Route for the login screen
 @loginScreenBlueprint.route("/")
@@ -25,52 +31,11 @@ def signupScreen():
     # Render the signup template
     return render_template("signup.html")
 
-# Route for the student management screen
-@studentManagementScreenBlueprint.route("/studentManagementScreen")
-def studentManagementScreen():
-    # Render the student management template
-    return render_template("studentManagement.html")
-
 # Route for the teacher management screen
 @teacherManagementScreenBlueprint.route("/teacherManagementScreen")
 def teacherManagementScreen():
     # Render the teacher management template
     return render_template("teacherManagement.html")
-
-# Route for the student home screen
-@studentHomeScreenBlueprint.route("/studentHomeScreen")
-def studentHomeScreen():
-    # Initialize the database handler with the database file
-    db = DataBaseHandler("appdata.db")
-    
-    # Retrieve the current student's username from the session
-    StudentUsername = session["currentUser"]
-    
-    # Retrieve class information for the student from the database
-    classInfo = db.getClassInfoStudent(StudentUsername)
-    ClassNames = []
-    for row in classInfo:
-        tempList = []
-        # Replace underscores with spaces for display purposes
-        tempList.append(row[1].replace("_", " "))
-        # Keep the original class name for internal use
-        tempList.append(row[1])
-        ClassNames.append(tempList)
-    
-    # Retrieve assignment information for the student from the database
-    assignmentInfo = db.getSetAssignments(StudentUsername)
-    AssignmentNames = []
-    for row in assignmentInfo:
-        tempList = []
-        # Replace underscores with spaces for display purposes
-        tempList.append(row[1].replace("_", " "))
-        # Keep the original assignment name for internal use
-        tempList.append(row[1])
-        AssignmentNames.append(tempList)
-    
-    # Render the student home template with the retrieved class and assignment information
-    return render_template("studentHome.html", ClassInfo=ClassNames, 
-                           AssignmentInfo=AssignmentNames)
 
 # Route for the teacher home screen
 @teacherHomeScreenBlueprint.route("/teacherHomeScreen")
@@ -212,4 +177,37 @@ def viewAssignments():
                            AssignmentInfo=assignmentInfo,
                            AssignmentName=assignmentName)
 
-
+# Route for the student home screen
+@studentHomeScreenBlueprint.route("/studentHomeScreen")
+def studentHomeScreen():
+    # Initialize the database handler with the database file
+    db = DataBaseHandler("appdata.db")
+    
+    # Retrieve the current student's username from the session
+    StudentUsername = session["currentUser"]
+    
+    # Retrieve class information for the student from the database
+    classInfo = db.getClassInfoStudent(StudentUsername)
+    ClassNames = []
+    for row in classInfo:
+        tempList = []
+        # Replace underscores with spaces for display purposes
+        tempList.append(row[1].replace("_", " "))
+        # Keep the original class name for internal use
+        tempList.append(row[1])
+        ClassNames.append(tempList)
+    
+    # Retrieve assignment information for the student from the database
+    assignmentInfo = db.getSetAssignments(StudentUsername)
+    AssignmentNames = []
+    for row in assignmentInfo:
+        tempList = []
+        # Replace underscores with spaces for display purposes
+        tempList.append(row[1].replace("_", " "))
+        # Keep the original assignment name for internal use
+        tempList.append(row[1])
+        AssignmentNames.append(tempList)
+    
+    # Render the student home template with the retrieved class and assignment information
+    return render_template("studentHome.html", ClassInfo=ClassNames, 
+                           AssignmentInfo=AssignmentNames)
