@@ -20,6 +20,12 @@ class DataBaseHandler:
             return False
         return True
     
+    def lengthCheck(self, data, min, max):
+        #checks if the length of the data is within the specified range
+        if len(data) < min or len(data) > max:
+            return False
+        return True
+    
     def createTables(self):
         #creates all the tables in the database
         self.connect() #connects to the database
@@ -73,8 +79,6 @@ class DataBaseHandler:
                             FOREIGN KEY (AssignmentID) REFERENCES Assignments(AssignmentID),
                             PRIMARY KEY (StudentUsername, AssignmentID)
                             );""")
-
-
         self.disconnect()
 
     def Login(self, username: str, password: str, isTeacher: bool):

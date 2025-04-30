@@ -115,7 +115,7 @@ def changeTeacherPassword():
     teacherUsername = session["currentUser"]
     
     # Check if the new password and confirmation password match
-    if newPassword == confirmPassword:
+    if newPassword == confirmPassword and db.lengthCheck(newPassword, 4,12) is True:
         # Verify the old password
         if db.Login(teacherUsername, oldPassword, True) is True:
             # Update the password in the database

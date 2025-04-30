@@ -66,7 +66,7 @@ def createUser():
     isTeacher = request.form.get("teacher")
     
     # Check if the password and confirm password match
-    if password == confirmPassword:
+    if password == confirmPassword and db.lengthCheck(password, 4,12) is True:
         # If the user is not a teacher
         if isTeacher is None:
             # Check if the username already exists for a student

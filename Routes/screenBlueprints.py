@@ -170,7 +170,8 @@ def viewAssignments():
     
     # Retrieve the assignment name from the request arguments
     assignmentName = request.args.get("AssignmentName")
-    
+    session["currentAssignmentName"] = assignmentName
+
     # Retrieve the assignment information from the database
     assignmentInfo = db.getAssignmentInfoName(assignmentName)
     assignmentName = assignmentInfo[0]

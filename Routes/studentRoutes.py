@@ -72,7 +72,7 @@ def changeStudentPassword():
     StudentUsername = session["currentUser"]
     
     # Check if the new password and confirm password match
-    if newPassword == confirmPassword:
+    if newPassword == confirmPassword and db.lengthCheck(newPassword, 4,12) is True:
         # Verify the old password
         if db.Login(StudentUsername, oldPassword, False) is True:
             # Update the password for the student
