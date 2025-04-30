@@ -369,7 +369,7 @@ class DataBaseHandler:
         Deletes an assignment and all related records from the database.
 
         This function connects to the database and deletes the assignment from the Assignments table,
-        as well as all related records from the TaskCompleted and Answers tables.
+        as well as all related records from the TaskCompleted tables.
 
         Parameters:
         AssignmentName (str): The name of the assignment to be deleted.
@@ -645,6 +645,8 @@ class DataBaseHandler:
     
 
 ### CYCLE 4 ####
+
+
     def JoinClass(self, StudentUsername: str, classID: int):
         """
         Adds a student to a specified class and creates related task completion records in the database.
@@ -733,7 +735,7 @@ class DataBaseHandler:
         Deletes a student and all related records from the database.
 
         This function connects to the database and deletes the student from the Students table,
-        as well as all related records from the ClassStudentJoin, Answers, and TaskCompleted tables.
+        as well as all related records from the ClassStudentJoin, and TaskCompleted tables.
 
         Parameters:
         studentUsername (str): The username of the student to be deleted.
@@ -753,12 +755,6 @@ class DataBaseHandler:
         self.cursor.execute(""" 
                             DELETE
                             FROM ClassStudentJoin
-                            WHERE StudentUsername = ?
-                            ;""", (studentUsername))
-        # Delete the student's answers from the Answers table
-        self.cursor.execute(""" 
-                            DELETE
-                            FROM Answers
                             WHERE StudentUsername = ?
                             ;""", (studentUsername))
         # Delete the student's task completion records from the TaskCompleted table

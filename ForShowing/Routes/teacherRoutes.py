@@ -44,15 +44,12 @@ def createAssignment():
     
     # Retrieve the current class ID from the session
     ClassID = session["currentClassID"]
-    
-    # Placeholder for QuizID, assuming it will be set dynamically in the future
-    QuizID = 1
-    
+        
     # Retrieve the assignment description from the form data
     AssignmentDescription = request.form["AssignmentDescription"]
     
     # Create the assignment in the database with the provided details
-    db.createAssignment(QuizID, ClassID, AssignmentName, AssignmentDescription)
+    db.createAssignment(ClassID, AssignmentName, AssignmentDescription)
     
     # Redirect to the refresh class screen to update the class details
     return redirect("/refreshClass")

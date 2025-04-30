@@ -369,7 +369,7 @@ class DataBaseHandler:
         Deletes an assignment and all related records from the database.
 
         This function connects to the database and deletes the assignment from the Assignments table,
-        as well as all related records from the TaskCompleted and Answers tables.
+        as well as all related records from the TaskCompleted table.
 
         Parameters:
         AssignmentName (str): The name of the assignment to be deleted.
