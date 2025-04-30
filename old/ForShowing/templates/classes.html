@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Classes</title>
+    <!-- Link to Bootstrap CSS for styling -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+
+<body>
+    <div class="container border p-5 bg-primary-subtle">
+        <!-- Display the class name -->
+        <h1 class="display-4 text-center mb-5 ">{{ClassName}}</h1>
+        <!-- Form to delete the class -->
+        <form action="/deleteClass" method="post">
+            <div>
+                <input class="btn btn-secondary bg-primary" type="submit" value="Delete Class">
+            </div>
+        </form>
+        <div class="border border-dark">
+            <!-- Form to create a new assignment -->
+            <form action="/createAssignment" method="post">
+                <div class="mb-3">
+                    <div class="mb-3">
+                        <label class="form-label" for="AssignmentName"> Enter Assignment Name: </label>
+                        <input type="text" name="AssignmentName" id="AssignmentName" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="AssignmentDescription"> Enter Assignment Description: </label>
+                        <input type="text" name="AssignmentDescription" id="AssignmentDescription" required>
+                    </div>
+                    <div>
+                        <input class="btn btn-secondary bg-primary" type="submit" value="createAssignment">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="mb-3">
+            <!-- Loop through the AssignmentNames variable and display each assignment -->
+            {% for row in AssignmentNames %}
+            <div class="mb-3">
+                <p> {{row[0]}}
+                    <a href={{"/deleteAssignment?AssignmentName="+row[1]}}>Delete Assignment</a>
+                    <!-- There will be an error as Assignment Name could have a space, will need to fix with string manipulation -->
+                    <a href={{"/assignmentDetails?AssignmentName="+row[1]}}>View Assignment</a>
+                </p>
+            </div>
+            {% endfor %}
+        </div>
+        <div>
+            <!-- Loop through the StudentNames variable and display each student -->
+            {% for row in StudentNames %}
+                <div class="mb-3">
+                    {{row[0]}} {{row[1]}}
+                    <a href={{"/deleteStudentFromClass?StudentUsername="+row[2]}}>Delete Student From the Class</a>
+                </div>
+            {% endfor %}
+        </div>
+        <!-- Form to go back to the teacher home screen -->
+        <form action="/teacherHomeScreen">
+            <div class="mb-3">
+                <input class="btn btn-secondary bg-primary" type="submit" value="Back">
+            </div>
+        </form>
+    </div>
+    <!-- Link to Bootstrap JS for functionality -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+</body>
+</html>

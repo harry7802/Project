@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, redirect, session
-from Database import DataBaseHandler
+from DatabaseCycle3 import DataBaseHandler
 
 # Define blueprints for different teacher-related routes
-createClassBlueprint = Blueprint("createClass", __name__)
-createAssignmentBlueprint = Blueprint("createAssignment", __name__)
+CreateClassBlueprint = Blueprint("createClass", __name__)
+CreateAssignmentBlueprint = Blueprint("createAssignment", __name__)
 deleteClassBlueprint = Blueprint("deleteClass",__name__)
 deleteAssignmentBlueprint = Blueprint("deleteAssignment",__name__)
 deleteStudentFromClassBlueprint = Blueprint("deleteStudentFromClass", __name__)
@@ -11,7 +11,7 @@ changeTeacherPasswordBlueprint = Blueprint("changeTeacherPasswordBlueprint", __n
 deleteTeacherBlueprint = Blueprint("deleteTeacher",__name__)
 
 # Route to create a new class
-@createClassBlueprint.route("/createClass", methods = ["post"])
+@CreateClassBlueprint.route("/createClass", methods = ["post"])
 def createClass():
     # Initialize the database handler with the database file
     db = DataBaseHandler("appdata.db")
@@ -32,7 +32,7 @@ def createClass():
     return redirect("/teacherHomeScreen")
 
 # Route to create a new assignment
-@createAssignmentBlueprint.route("/createAssignment", methods = ["post"])
+@CreateAssignmentBlueprint.route("/createAssignment", methods = ["post"])
 def createAssignment():
     # Initialize the database handler with the database file
     db = DataBaseHandler("appdata.db")
@@ -44,7 +44,7 @@ def createAssignment():
     
     # Retrieve the current class ID from the session
     ClassID = session["currentClassID"]
-        
+    
     # Retrieve the assignment description from the form data
     AssignmentDescription = request.form["AssignmentDescription"]
     

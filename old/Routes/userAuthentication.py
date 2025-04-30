@@ -1,5 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, session
-from Database import DataBaseHandler
+from DataBase import DataBaseHandler
+import datetime
 
 # Define blueprints for different user authentication-related routes
 createUserBlueprint = Blueprint("createUser", __name__)
@@ -71,8 +72,10 @@ def createUser():
         if isTeacher is None:
             # Check if the username already exists for a student
             if db.checkUsernameExists(username, False) is False:
+                # Get the current date and time
+                time = datetime.datetime.today()
                 # Create a new student in the database with the provided details
-                db.createStudent(username, password, email, FirstName, LastName)
+                db.createStudent(username, password, email, FirstName, LastName, time)
                 # Set the current user in the session
                 session["currentUser"] = username
                 # Redirect to the student home screen after creating the student

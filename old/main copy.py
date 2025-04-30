@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, redirect
 from Routes.screenBlueprints import studentHomeScreenBlueprint, teacherHomeScreenBlueprint, signupScreenBlueprint, loginScreenBlueprint
 from Routes.userAuthentication import createUserBlueprint, logOutBlueprint, loginBlueprint
 from Routes.screenBlueprints import classDetailsScreenBlueprint, AssignmentDetailsScreenBlueprint, refreshClassScreenBlueprint
-from Routes.screenBlueprints import viewAssignmentsScreenBlueprint, teacherManagementScreenBlueprint, studentManagementScreenBlueprint
+from Routes.screenBlueprints import viewAssignmentsScreenBlueprint, teacherManagementScreenBlueprint
 from Routes.teacherRoutes import createClassBlueprint, createAssignmentBlueprint, deleteClassBlueprint, deleteAssignmentBlueprint
 from Routes.teacherRoutes import deleteStudentFromClassBlueprint, changeTeacherPasswordBlueprint, deleteTeacherBlueprint
 from Routes.studentRoutes import joinClassBlueprint, leaveClassBlueprint, markAsDoneBlueprint
@@ -31,7 +31,6 @@ app.register_blueprint(AssignmentDetailsScreenBlueprint)
 app.register_blueprint(refreshClassScreenBlueprint)
 app.register_blueprint(viewAssignmentsScreenBlueprint)
 app.register_blueprint(teacherManagementScreenBlueprint)
-app.register_blueprint(studentManagementScreenBlueprint)
 
 # Registering user authentication blueprints
 app.register_blueprint(createUserBlueprint)
@@ -58,5 +57,3 @@ app.register_blueprint(deleteStudentBlueprint)
 
 # Run app
 app.run(debug = True) # Run the Flask app in debug mode
-
-
